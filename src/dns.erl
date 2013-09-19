@@ -99,6 +99,7 @@
 		| #dns_rrdata_spf{}
 		| #dns_rrdata_srv{}
 		| #dns_rrdata_sshfp{}
+		| #dns_rrdata_tlsa{}
 		| #dns_rrdata_tsig{}
 		| #dns_rrdata_txt{}.
 -type encode_message_opt() :: {'max_size', 512..65535} |
@@ -921,6 +922,9 @@ decode_rrdata(_Class, ?DNS_TYPE_SRV, <<Pri:16, Wght:16, Port:16, Bin/binary>>,
 decode_rrdata(_Class, ?DNS_TYPE_SSHFP, <<Alg:8, FPType:8, FingerPrint/binary>>,
 	      _MsgBin) ->
     #dns_rrdata_sshfp{alg=Alg, fp_type=FPType, fp=FingerPrint};
+decode_rrdata(_Class, ?DNS_TYPE_TLSA, <<CU, S, MT, CAData/binary>>, _MsgBin) ->
+    #dns_rrdata_tlsa{certusage = CU, selector = S, matchingtype = MT,
+                     cadata = CAData};
 decode_rrdata(_Class, ?DNS_TYPE_TSIG, Bin, MsgBin) ->
     {Alg, <<Time:48, Fudge:16, MS:16, MAC:MS/bytes, MsgID:16, ErrInt:16,
 	    OtherLen:16, Other:OtherLen/binary>>} = decode_dname(Bin, MsgBin),
@@ -1151,6 +1155,11 @@ encode_rrdata(_Pos, _Class, #dns_rrdata_sshfp{alg = Alg,
 					      fp_type = FPType,
 					      fp = FingerPrint}, CompMap) ->
     {<<Alg:8, FPType:8, FingerPrint/binary>>, CompMap};
+encode_rrdata(_Pos, _Class, #dns_rrdata_tlsa{certusage = CU,
+                                             selector = S,
+                                             matchingtype = MT,
+                                             cadata = CAData}, CompMap) ->
+    {<<CU, S, MT, CAData/binary>>, CompMap};
 encode_rrdata(_Pos, _Class, #dns_rrdata_tsig{alg = Alg, time = Time,
 					     fudge = Fudge, mac = MAC,
 					     msgid = MsgID, err = Err,

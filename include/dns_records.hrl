@@ -86,6 +86,7 @@
 -record(dns_rrdata_spf, {spf}).
 -record(dns_rrdata_srv, {priority, weight, port, target}).
 -record(dns_rrdata_sshfp, {alg, fp_type, fp}).
+-record(dns_rrdata_tlsa, {certusage, selector, matchingtype, cadata}).
 -record(dns_rrdata_tsig, {alg, time, fudge, mac, msgid, err, other}).
 -record(dns_rrdata_txt, {txt}).
 
