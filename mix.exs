@@ -1,32 +1,25 @@
-defmodule DNS.Mixfile do
+defmodule DNSSEC.Mixfile do
   use Mix.Project
 
   def project do
-    [app: :dns,
-     version: "0.1.0",
-     elixir: "~> 1.4",
-     compilers: [:asn1, :erlang] ++ Mix.compilers,
-     build_embedded: Mix.env == :prod,
-     start_permanent: Mix.env == :prod,
-     deps: deps()]
+    [ app: :dnssec,
+      version: "0.1.0",
+      elixir: "~> 1.7",
+      description: "DNSSEC Library",
+      package: package(),
+      deps: deps()]
   end
 
-  # Configuration for the OTP application.
-  #
-  # Type `mix help compile.app` for more information.
-  def application do
-    [#mod: {:dns, []},
-     applications: [:kernel, :stdlib, :crypto, :base32]]
-  end
-
-
-  # Specifies your project dependencies.
-  #
-  # Type `mix help deps` for examples and options.
-  defp deps do
+  def package do
     [
-        {:base32, github: "dnsimple/base32_erlang", branch: :master},
-        {:asn1ex, github: "T0ha/asn1ex", branch: "master"}
+      files: ~w(include priv src mix.exs LICENSE),
+      licenses: ["Apache"],
+      maintainers: ["Namdak Tonpa"],
+      name: :ca,
+      links: %{"GitHub" => "https://github.com/voxoz/dns_erlang"}
     ]
   end
+
+  def application, do: [applications: [:kernel, :stdlib, :crypto, :base32]]
+  def deps, do: [{:base32, "~> 0.1.0"},{:ex_doc, "~> 0.11", only: :dev}]
 end
