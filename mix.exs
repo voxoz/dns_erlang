@@ -15,7 +15,7 @@ defmodule DNSSEC.Mixfile do
       files: ~w(include priv src mix.exs LICENSE),
       licenses: ["Apache"],
       maintainers: ["Namdak Tonpa"],
-      name: :ca,
+      name: :dnssec,
       links: %{"GitHub" => "https://github.com/voxoz/dns_erlang"}
     ]
   end
